@@ -1,2 +1,2 @@
 # budjojo
-a mini bedget app with typescript
+a mini budget app with typescript
