@@ -25,7 +25,7 @@ let initialState: IUserState;
 try {
   const token : string | null = sessionStorage.getItem('jwtToken');
   if (token) {
-  initialState = jwtDecode(token); 
+  initialState = { user: jwtDecode(token)}; 
   } else {
     initialState = {
       user: {
@@ -80,10 +80,9 @@ export const userReducer: Reducer<IUserState, UserActions> = (
         };
       }
     case IncomeActionType.INCOME_SUCCESS : {
-      const userState = {...state}
-        userState.user.income = action.income
         return {
-          ...userState,
+          ...state, 
+          user: action.user,
           isLoading: true, 
         };
       }

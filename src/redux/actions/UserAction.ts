@@ -59,9 +59,8 @@ export const signupRequest: ActionCreator<
         type: UserActionTypes.SIGNUP_BEGIN
       })
       const response = await axios.post('http://localhost:5000/api/v1/auth/signup', user);
-      const payload = response.data.data[0]
-      sessionStorage.setItem('jwtToken', payload.token);
-      delete payload.token
+      const  {token, ...payload} = response.data.data[0]
+      sessionStorage.setItem('jwtToken', token);
       dispatch({
         payload,
         type: UserActionTypes.SIGNUP_SUCCESS,
@@ -87,9 +86,8 @@ export const loginRequest: ActionCreator<ThunkAction<Promise<any>, IUserState, n
     })
     try{
       const response = await axios.post('http://localhost:5000/api/v1/auth/login', user);
-      const payload = response.data.data[0]
-      sessionStorage.setItem('jwtToken', payload.token);
-      delete payload.token
+      const  {token, ...payload} = response.data.data[0]
+      sessionStorage.setItem('jwtToken', token);
       dispatch({
         payload,
         type: UserActionTypes.LOGIN_SUCCESS

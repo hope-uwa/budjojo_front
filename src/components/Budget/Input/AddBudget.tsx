@@ -8,15 +8,16 @@ import AddIcon from '@material-ui/icons/Add';
 
 
 
-export interface IProps {
-    
-    userInfo: any;
-    classes: any;
-  }
+  
    interface IIState {
     entity: string,
-    entityBudget: string
+    entityBudget: number | null,
    }
+   export interface IProps { 
+    userInfo: any;
+    classes: any;
+    handleEntries: (entries: IIState) => void
+  }
    interface IState {
     entries: IIState
    }
@@ -48,19 +49,19 @@ export interface IProps {
 class AddBudget extends React.Component<IProps, IState> {
     public state = {
         entries: { entity: '',
-        entityBudget: ''}
+        entityBudget: null}
     }
     
 
   public render() {
     const { classes } = this.props;
-    const { entries: { entityBudget }  } = this.state;
 
     return (
         <Grid container={true} direction="row" justify="space-between" alignItems="center">
           <TextField
             label="Budget"
             id="margin-dense"
+            onChange={this.handleChange('entity')}
             className={classes.textField}
             margin="dense"
           />
@@ -75,14 +76,13 @@ class AddBudget extends React.Component<IProps, IState> {
           <TextField
             className={classes.formControl}
             label="budget amount"
-            value={entityBudget!}
             onChange={this.handleChange('entityBudget')}
             id="formatted-numberformat-input"
             InputProps={{
               inputComponent: NumberFormatCustom as any,
             }}
           />
-          <Fab size="medium"  aria-label="Add" className={classes.addMoreButton}>
+          <Fab size="medium" onClick={this.addEntry}  aria-label="Add" className={classes.addMoreButton}>
             <AddIcon />
           </Fab>
         </Grid>
@@ -91,13 +91,22 @@ class AddBudget extends React.Component<IProps, IState> {
   }
 
   private handleChange = (name: keyof IIState) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { entries } = this.state
-    const newEntries : IIState = entries
+    const { entries } = this.state;
+    const newEntries : IIState = { ...entries }
     newEntries[name]= event.target.value
     this.setState({
       entries: newEntries,
     } as Pick<IState, keyof IState>);
   };
+
+  private addEntry = (event: any) => {
+    event.preventDefault()
+    const { handleEntries } = this.props;
+    const { entries } = this.state;
+    handleEntries(entries)
+  }
+  
+  
 }
 
 (AddBudget as React.ComponentClass<IProps>).propTypes = {

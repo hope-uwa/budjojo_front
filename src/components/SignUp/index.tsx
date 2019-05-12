@@ -24,7 +24,6 @@ export interface IProps extends WithStyles<typeof styles> {
  
  }
 class SignUp extends React.Component<IProps, IState> {
-
   private static propKey(propertyName: string, value: any): object {
     return { [propertyName]: value };
   }
@@ -43,9 +42,6 @@ class SignUp extends React.Component<IProps, IState> {
   };
 
   public labelRef: HTMLElement | null | undefined;
-
-  
- 
 
   public toggleSignUpAndLogin = (login: boolean) => {
     login ? this.setState({
@@ -66,11 +62,6 @@ class SignUp extends React.Component<IProps, IState> {
         }});
 
   }
-
-
-  
-
-  
 
   public render(){
     const { classes } = this.props;
@@ -143,17 +134,14 @@ class SignUp extends React.Component<IProps, IState> {
               </div>          
             </CardContent>
           </Card>
-
     );
   }  
 
   private checkSuccess = () =>{
     const { userInfo: { user, error}, history } = this.props
       if(error === null){
-        console.log(user)
         history.push(`/user/${user.username}`)
       }
-
   }
   private onSubmit = async(event: any) => {
     event.preventDefault();
@@ -165,17 +153,13 @@ class SignUp extends React.Component<IProps, IState> {
     }
     else{
       await loginUser({email, password});
-      this.checkSuccess()
-        
-      
+      this.checkSuccess()      
     }
   }
   private setStateWithEvent(event: any, columnType: string) {
     this.setState(SignUp.propKey(columnType, (event.target as any).value));
   }
 }
-
-
 
 (SignUp as React.ComponentClass<IProps>).propTypes = {
   classes: PropTypes.object.isRequired,

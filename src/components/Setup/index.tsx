@@ -165,8 +165,6 @@ class Setup extends React.Component<IProps, IState> {
     const income = event.target.value
     this.setState({income})
   } 
-
-
   }
 
 

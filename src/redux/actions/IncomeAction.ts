@@ -3,12 +3,12 @@ import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { toast } from 'react-toastify';
 
-export interface Income {
-    income: number
-}
+
+import { IUserState, IUser } from '../reducers/UserReducer';
+
 // Define the User State
 export interface IncomeState {
-    income: Income;
+    data: IUserState;
 }
 
 
@@ -18,7 +18,7 @@ export enum IncomeActionType {
 }
 export interface IncomeSuccess {
     type: IncomeActionType.INCOME_SUCCESS;
-    income: number
+    user: IUser
 }
 
 export interface IncomeFailure {
@@ -27,23 +27,18 @@ export interface IncomeFailure {
 }
 
 export type IncomeAction = IncomeSuccess | IncomeFailure;
-const token = sessionStorage.getItem('jwtToken')
+
 export const incomeRequest: ActionCreator<
   ThunkAction<Promise<any>, IncomeState, null, IncomeAction>
 > = (income) => {
-    console.warn(income)
   return async (dispatch: Dispatch) => {
     try {
       
-      const response = await axios({
-        method: 'PUT',
-        url: 'http://localhost:5000/api/v1/income',
-        headers: { 'authorization': token },
-        data: income
-      });
-      console.log(response)
+      const response = await axios.put('http://localhost:5000/api/v1/income', income );
+      const {token: newToken, ...payload} = response.data.data
+      sessionStorage.setItem('jwtToken', newToken);
       dispatch({
-        income: response.data.data.income,
+        user: payload,
         type: IncomeActionType.INCOME_SUCCESS
       });
       toast.success('Sign up successfully')
